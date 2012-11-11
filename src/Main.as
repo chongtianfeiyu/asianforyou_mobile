@@ -5,23 +5,24 @@
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
 	import flash.display.MovieClip;
-	import flash.events.Event;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
+	import flash.events.TouchEvent;
 	import flash.geom.Point;
 	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+	import flash.system.Capabilities;
+	import flash.text.TextField;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
-	import flash.events.TouchEvent;
 	import flash.utils.ByteArray;
-	import flash.system.Capabilities;
-	import gs.TweenLite;
 	
-	import flash.net.URLLoaderDataFormat;
+	import gs.TweenLite;
 	
 	/**
 	 * ...
@@ -66,8 +67,7 @@
 			initBottomBar();
 			initLoadingMc();
 			//loadImage("http://www.theblackalley.info/hardcore/jasminewang01/jasminewang07.jpg");
-			loadImage("https://www.dropbox.com/s/06fn4aw4eu2sc81/IMG_2016.JPG");
-			//loadImage("http://www.theblackalley.biz/models/amelialuv06/11.jpg");
+			loadImage("http://www.theblackalley.net/asian4you/nudegalleries/chin-si-yee-04a/13.jpg");
 		}
 		private function initActiveBar():void {
 			activeBar = new ActiveBar() as Sprite;
@@ -111,7 +111,9 @@
 			loader = new URLLoader();
 			showBottomBar(false);
 			loader.dataFormat = URLLoaderDataFormat.BINARY;
-			loader.addEventListener(Event.INIT, onImageLoadingStartHandler);
+			loadingBar.visible = true;
+			loadingBar.gotoAndStop(1);
+			//loader.addEventListener(Event.INIT, onImageLoadingStartHandler);
 			loader.addEventListener(Event.COMPLETE, onImageLoadCompleteHandler);
 			loader.addEventListener(ProgressEvent.PROGRESS, onImageLoadingHandler);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, onImageLoadErrorHandler);
@@ -127,6 +129,7 @@
             loader = null;
 		}
 		private function onImageLoadingStartHandler(event:Event):void {
+			trace("onImageLoadingStartHandler");
 			loadingBar.visible = true;
 			loadingBar.gotoAndStop(1);
 			loader.removeEventListener(Event.INIT, onImageLoadingStartHandler);
@@ -146,6 +149,8 @@
 		private function onImageLoadingHandler(event:ProgressEvent):void {
 			var loadedPercent:int = event.bytesLoaded / event.bytesTotal * 100;
 			loadingBar.gotoAndStop(loadedPercent);
+			var txt:TextField = loadingBar.getChildByName("txt") as TextField;
+			txt.text = loadedPercent + "%";
 		}
 		private function onImageLoadErrorHandler(event:IOErrorEvent):void {
 			trace("Picture load error:");
